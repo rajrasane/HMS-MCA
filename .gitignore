@@ -1,2 +1,4 @@
 *.class
 .vscode
+target/
+src/main/resources/config/application.properties
