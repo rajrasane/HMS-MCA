@@ -1,0 +1,33 @@
+CREATE DATABASE IF NOT EXISTS hospital;
+USE hospital;
+
+CREATE TABLE IF NOT EXISTS patients (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    age INT NOT NULL,
+    gender VARCHAR(10) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS doctors (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    specialization VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS appointments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    patient_id INT NOT NULL,
+    doctor_id INT NOT NULL,
+    appointment_date DATE NOT NULL,
+    CONSTRAINT fk_appointments_patient FOREIGN KEY (patient_id) REFERENCES patients(id),
+    CONSTRAINT fk_appointments_doctor FOREIGN KEY (doctor_id) REFERENCES doctors(id),
+    CONSTRAINT uq_doctor_date UNIQUE (doctor_id, appointment_date)
+);
+
+INSERT INTO doctors (name, specialization)
+SELECT 'Dr. Ananya Sharma', 'Cardiology'
+WHERE NOT EXISTS (SELECT 1 FROM doctors WHERE name = 'Dr. Ananya Sharma');
+
+INSERT INTO doctors (name, specialization)
+SELECT 'Dr. Vikram Patel', 'General Medicine'
+WHERE NOT EXISTS (SELECT 1 FROM doctors WHERE name = 'Dr. Vikram Patel');
